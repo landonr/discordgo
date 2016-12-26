@@ -13,6 +13,7 @@ package discordgo
 
 import (
 	"encoding/json"
+	"net/http"
 	"strconv"
 	"sync"
 	"time"
@@ -73,6 +74,9 @@ type Session struct {
 	// StateEnabled is true.
 	State *State
 
+	// The http client used for REST requests
+	Client *http.Client
+
 	// Event handlers
 	handlersMu   sync.RWMutex
 	handlers     map[string][]*eventHandlerInstance
@@ -98,12 +102,6 @@ type Session struct {
 
 	// used to make sure gateway websocket writes do not happen concurrently
 	wsMutex sync.Mutex
-}
-
-type rateLimitMutex struct {
-	sync.Mutex
-	url map[string]*sync.Mutex
-	// bucket map[string]*sync.Mutex // TODO :)
 }
 
 // A VoiceRegion stores data for a specific voice region server.
@@ -252,6 +250,7 @@ type Role struct {
 	Permissions int    `json:"permissions"`
 }
 
+// Roles are a collection of Role
 type Roles []*Role
 
 func (r Roles) Len() int {
@@ -579,5 +578,6 @@ const (
 	PermissionAll = PermissionAllChannel |
 		PermissionKickMembers |
 		PermissionBanMembers |
-		PermissionManageServer
+		PermissionManageServer |
+		PermissionAdministrator
 )
