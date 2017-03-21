@@ -74,7 +74,7 @@ func (s *Session) request(method, urlStr, contentType string, b []byte, bucketID
 	// Not used on initial login..
 	// TODO: Verify if a login, otherwise complain about no-token
 	if s.Token != "" {
-		req.Header.Set("authorization", s.Token)
+		req.Header.Set("authorization", fmt.Sprintf("Bot %s", s.Token))
 	}
 
 	req.Header.Set("Content-Type", contentType)
